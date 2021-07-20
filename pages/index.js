@@ -109,10 +109,12 @@ function EpisodeCardItem({ episode }) {
     }
   );
 
+  const claimed = episode.claimed || mutation.isSuccess;
+
   return (
     <button
       className={styles.card}
-      disabled={episode.claimed || mutation.isLoading}
+      disabled={claimed}
       onClick={() => {
         if (
           confirm(
@@ -125,7 +127,7 @@ function EpisodeCardItem({ episode }) {
     >
       <h2>{episode.name}</h2>
       <p>
-        {mutation.isSuccess || episode.claimed
+        {claimed
           ? "Claimed!"
           : mutation.isLoading
           ? "Claiming..."
