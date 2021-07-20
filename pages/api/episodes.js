@@ -28,7 +28,6 @@ export default async function handler(req, res) {
     const claimed = new Set(
       await redis.hvals(`user:${session.user.id}:episodes`)
     );
-    console.log("claimed", claimed);
     res.status(200).json({
       body: episodes.map((episode) => ({
         ...episode,
