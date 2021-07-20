@@ -1,5 +1,6 @@
 import React from "react";
 import Head from "next/head";
+import toast from "react-hot-toast";
 import { signIn, signOut, useSession } from "next-auth/client";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 
@@ -38,7 +39,7 @@ export default function Home() {
           </>
         ) : (
           <button className={styles.card} onClick={() => signIn("github")}>
-            <p>Log in to continue</p>
+            <p>Login with GitHub to continue</p>
           </button>
         )}
       </main>
@@ -78,8 +79,8 @@ function EpisodeCardList() {
 function EpisodeCardItem({ episode }) {
   const queryClient = useQueryClient();
   const mutation = useMutation(
-    (id) =>
-      fetch("/api/episodes", {
+    async (id) => {
+      const response = await fetch("/api/episodes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,10 +88,23 @@ function EpisodeCardItem({ episode }) {
         body: JSON.stringify({
           id,
         }),
-      }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return data;
+      } else {
+        return Promise.reject(new Error(data.description));
+      }
+    },
+
     {
       onSuccess: () => {
         queryClient.invalidateQueries("episodes");
+      },
+      onError(error) {
+        toast.error(error.message);
       },
     }
   );
@@ -111,7 +125,7 @@ function EpisodeCardItem({ episode }) {
     >
       <h2>{episode.name}</h2>
       <p>
-        {episode.claimed
+        {mutation.isSuccess || episode.claimed
           ? "Claimed!"
           : mutation.isLoading
           ? "Claiming..."

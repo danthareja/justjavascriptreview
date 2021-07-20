@@ -35,24 +35,29 @@ export default async function handler(req, res) {
       })),
     });
   } else if (req.method === "POST") {
+    // return res.status(501).json({
+    //   error: "not_implemented",
+    //   description: "Just kidding this isn't implemented yet",
+    // });
+
     const { id } = req.body;
 
     if (!id) {
-      res.status(400).json({
+      return res.status(400).json({
         error: "invalid_body",
         description: "Missing body param 'id'",
       });
     }
 
     if (!episodes.find((episode) => episode.id === id)) {
-      res.status(404).json({
+      return res.status(404).json({
         error: "not_found",
         description: `No episode with id ${id}`,
       });
     }
 
     await redis.hset(`user:${session.user.id}:episodes`, id, id);
-    res.status(200).json({
+    return res.status(200).json({
       body: "success",
     });
   } else {

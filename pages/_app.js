@@ -1,5 +1,6 @@
 import { Provider as AuthProvider } from "next-auth/client";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Toaster } from "react-hot-toast";
 
 import "../styles/globals.css";
 
@@ -9,6 +10,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <AuthProvider session={pageProps.session}>
       <QueryClientProvider client={queryClient}>
+        <Toaster />
         <Component {...pageProps} />
       </QueryClientProvider>
     </AuthProvider>
