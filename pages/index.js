@@ -30,7 +30,7 @@ export default function Home() {
           <>
             <p className={styles.description}>
               When you are done with an episode, click the button below to
-              schedule an appointment
+              schedule an appointment with Dan
             </p>
 
             <div className={styles.grid}>

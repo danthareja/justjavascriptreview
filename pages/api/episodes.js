@@ -35,10 +35,10 @@ export default async function handler(req, res) {
       })),
     });
   } else if (req.method === "POST") {
-    // return res.status(501).json({
-    //   error: "not_implemented",
-    //   description: "Just kidding this isn't implemented yet",
-    // });
+    return res.status(501).json({
+      error: "not_implemented",
+      description: "Just kidding this isn't implemented yet",
+    });
 
     const { id } = req.body;
 
